@@ -1,5 +1,8 @@
 package com.rizalfadiaalfikri.echosphere.models.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,5 +26,8 @@ public class Users {
     private String lastName;
     private String email;
     private String password;
+    private String gender;
+    private List<Long> followers = new ArrayList<>();
+    private List<Long> followings = new ArrayList<>();
 
 }
