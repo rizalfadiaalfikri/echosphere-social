@@ -49,9 +49,9 @@ public class AuthController {
     public ResponseEntity<Response> login(@RequestBody LoginDto dto) {
         LoginResponse response = authService.login(dto);
 
-        return ResponseEntity.created(URI.create("")).body(
+        return ResponseEntity.ok().body(
                 Response.builder()
-                        .code(201)
+                        .code(200)
                         .message("Login has successfully")
                         .success(true)
                         .version(version)

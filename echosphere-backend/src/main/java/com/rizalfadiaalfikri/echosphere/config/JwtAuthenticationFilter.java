@@ -36,6 +36,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${application.version}")
+    String applicationVersion;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -50,9 +55,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else if (jwt != null && !jwtUtils.validateJwtToken(jwt)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                ErrorResponse errorResponse = new ErrorResponse(401, "Invalid Token", applicationVersion);
+
+                String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+                // Set the content type to application/json
+                response.setContentType("application/json");
+
+                // Write the JSON response to the output stream
+                response.getWriter().write(jsonResponse);
+                response.getWriter().flush();
+
+                return;
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            // Create a JSON response object
+            ErrorResponse errorResponse = new ErrorResponse(401, "Unauthorized", applicationVersion);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+            // Set the content type to application/json
+            response.setContentType("application/json");
+
+            // Write the JSON response to the output stream
+            response.getWriter().write(jsonResponse);
+            response.getWriter().flush();
+
+            return;
         }
 
         filterChain.doFilter(request, response);
