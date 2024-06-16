@@ -1,7 +1,5 @@
 package com.rizalfadiaalfikri.echosphere.models.req;
 
-import com.rizalfadiaalfikri.echosphere.models.entity.Users;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +14,5 @@ public class PostsDto {
 
     private String video;
 
-    private Users users;
+    private Long usersId;
 }
