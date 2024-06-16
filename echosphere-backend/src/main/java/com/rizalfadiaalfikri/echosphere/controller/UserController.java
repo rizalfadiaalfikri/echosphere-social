@@ -24,95 +24,81 @@ import com.rizalfadiaalfikri.echosphere.services.UserService;
 @RestController
 public class UserController {
 
-    @Value("${application.version}")
-    private String version;
+        @Value("${application.version}")
+        private String version;
 
-    @Autowired
-    private UserService userService;
+        @Autowired
+        private UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<Response> register(@RequestBody UsersDto dto) {
-        Users users = userService.registerUser(dto);
+        @GetMapping("/users/{id}")
+        public ResponseEntity<Response> findById(@PathVariable Long id) {
+                Users users = userService.findUserById(id);
 
-        return ResponseEntity.created(URI.create("")).body(
-                Response.builder()
-                        .code(201)
-                        .message("Data was successfully registered")
-                        .success(true)
-                        .version(version)
-                        .data(users)
-                        .build());
-    }
+                return ResponseEntity.ok().body(
+                                Response.builder()
+                                                .code(200)
+                                                .message("Data Found")
+                                                .success(true)
+                                                .version(version)
+                                                .data(users)
+                                                .build());
+        }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<Response> findById(@PathVariable Long id) {
-        Users users = userService.findUserById(id);
+        @GetMapping("/users")
+        public ResponseEntity<Response> findByEmail(@RequestParam("email") String email) {
+                Users users = userService.findUserByEmail(email);
 
-        return ResponseEntity.ok().body(
-                Response.builder()
-                        .code(200)
-                        .message("Data Found")
-                        .success(true)
-                        .version(version)
-                        .data(users)
-                        .build());
-    }
+                return ResponseEntity.ok().body(
+                                Response.builder()
+                                                .code(200)
+                                                .message("Data Found")
+                                                .success(true)
+                                                .version(version)
+                                                .data(users)
+                                                .build());
+        }
 
-    @GetMapping("/users")
-    public ResponseEntity<Response> findByEmail(@RequestParam("email") String email) {
-        Users users = userService.findUserByEmail(email);
+        @PutMapping("/users/follow/{userId1}/{usersId2}")
+        public ResponseEntity<Response> followuserHandler(@PathVariable("userId1") Long userId1,
+                        @PathVariable("usersId2") Long userId2) {
+                Users users = userService.followuser(userId1, userId2);
 
-        return ResponseEntity.ok().body(
-                Response.builder()
-                        .code(200)
-                        .message("Data Found")
-                        .success(true)
-                        .version(version)
-                        .data(users)
-                        .build());
-    }
+                return ResponseEntity.ok().body(
+                                Response.builder()
+                                                .code(200)
+                                                .message("Data success updated")
+                                                .success(true)
+                                                .version(version)
+                                                .data(users)
+                                                .build());
+        }
 
-    @PutMapping("/users/follow/{userId1}/{usersId2}")
-    public ResponseEntity<Response> followuserHandler(@PathVariable("userId1") Long userId1,
-            @PathVariable("usersId2") Long userId2) {
-        Users users = userService.followuser(userId1, userId2);
+        @PutMapping("/users/{id}")
+        public ResponseEntity<Response> updateUser(@RequestBody UsersDto dto, @PathVariable("id") Long id) {
+                Users users = userService.updateUser(dto, id);
 
-        return ResponseEntity.ok().body(
-                Response.builder()
-                        .code(200)
-                        .message("Data success updated")
-                        .success(true)
-                        .version(version)
-                        .data(users)
-                        .build());
-    }
+                return ResponseEntity.ok().body(
+                                Response.builder()
+                                                .code(200)
+                                                .message("Data success updated")
+                                                .success(true)
+                                                .version(version)
+                                                .data(users)
+                                                .build());
+        }
 
-    @PutMapping("/users/{id}")
-    public ResponseEntity<Response> updateUser(@RequestBody UsersDto dto, @PathVariable("id") Long id) {
-        Users users = userService.updateUser(dto, id);
+        @GetMapping("/users/search")
+        public ResponseEntity<Response> searchUsers(@RequestParam("query") String query) {
+                List<Users> users = userService.searchUser(query);
 
-        return ResponseEntity.ok().body(
-                Response.builder()
-                        .code(200)
-                        .message("Data success updated")
-                        .success(true)
-                        .version(version)
-                        .data(users)
-                        .build());
-    }
-
-    @GetMapping("/users/search")
-    public ResponseEntity<Response> searchUsers(@RequestParam("query") String query) {
-        List<Users> users = userService.searchUser(query);
-
-        return ResponseEntity.ok().body(
-                Response.builder()
-                        .code(200)
-                        .message("Data Found")
-                        .success(true)
-                        .version(version)
-                        .data(users)
-                        .build());
-    }
+                return ResponseEntity.ok().body(
+                                Response.builder()
+                                                .code(200)
+                                                .message("Data Found")
+                                                .success(true)
+                                                .version(version)
+                                                .data(users)
+                                                .build());
+        }
 
 }

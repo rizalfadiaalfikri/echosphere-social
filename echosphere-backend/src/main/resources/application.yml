@@ -25,6 +25,12 @@ spring:
     show-sql: true
     open-in-view: false
 
+app:
+  jwt:
+    secret: fghijklmnopqrstuvwxyz123456788abcdEFGHIJKLMNOP
+    expiresIn:
+      milisecons: 86400000
+
 application:
   version: 1.0.0
   name: echo-sphere
