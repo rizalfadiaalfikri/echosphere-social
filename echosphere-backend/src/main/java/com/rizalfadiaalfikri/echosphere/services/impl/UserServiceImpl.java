@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.rizalfadiaalfikri.echosphere.config.JwtUtils;
 import com.rizalfadiaalfikri.echosphere.models.entity.Roles;
 import com.rizalfadiaalfikri.echosphere.models.entity.Users;
 import com.rizalfadiaalfikri.echosphere.models.req.UsersDto;
@@ -28,6 +29,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Override
     public Users registerUser(UsersDto usersDto) {
@@ -95,6 +99,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Users> searchUser(String query) {
         return userRepository.searchUsers(query);
+    }
+
+    @Override
+    public Users findByTokenJwt(String jwt) {
+        String email = jwtUtils.getUserNameFromJwtToken(jwt);
+
+        Users users = userRepository.findByEmail(email).orElseThrow(
+                () -> new RowNotFoundException("Users with email " + email + " is not found"));
+
+        return users;
     }
 
 }

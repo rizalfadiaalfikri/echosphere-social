@@ -23,7 +23,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
-    open-in-view: false
+    open-in-view: true
 
 app:
   jwt:

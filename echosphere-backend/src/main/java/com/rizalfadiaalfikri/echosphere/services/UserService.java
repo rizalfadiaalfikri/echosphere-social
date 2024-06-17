@@ -19,4 +19,6 @@ public interface UserService {
 
     public List<Users> searchUser(String query);
 
+    public Users findByTokenJwt(String jwt);
+
 }

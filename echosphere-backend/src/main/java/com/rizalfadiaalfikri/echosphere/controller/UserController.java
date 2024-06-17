@@ -101,4 +101,17 @@ public class UserController {
                                                 .build());
         }
 
+        @GetMapping("/users/jwt")
+        public ResponseEntity<Response> findUsersByToken(@RequestParam("token") String token) {
+                Users users = userService.findByTokenJwt(token);
+
+                return ResponseEntity.ok().body(
+                                Response.builder()
+                                                .code(200)
+                                                .message("Data Found")
+                                                .success(true)
+                                                .version(version)
+                                                .data(users)
+                                                .build());
+        }
 }
